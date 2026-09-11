@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ducklien Aditi's Disctionary</title>
+    <style>
+      :root {
+        --primary: #e94560;
+        --bg: #1a1a2e;
+        --card: #16213e;
+        --input: #0f3460;
+        --text: #ffffff;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .container {
+        background: var(--card);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: 95%;
+        max-width: 700px;
+        border: 1px solid var(--input);
+        margin-bottom: 30px;
+      }
+      h1, h2 {
+        color: var(--primary);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 0;
+      }
+
+      textarea {
+        width: 100%;
+        height: 120px;
+        padding: 15px;
+        border: 2px solid var(--input);
+        border-radius: 12px;
+        font-size: 18px;
+        box-sizing: border-box;
+        background: var(--input);
+        color: #fff;
+        margin-bottom: 20px;
+        resize: none;
+        outline: none;
+        transition: 0.3s;
+      }
+      textarea:focus {
+        border-color: var(--primary);
+      }
+
+      .controls {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #aaa;
+      }
+
+      select, input[type="range"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        background: var(--bg);
+        color: #fff;
+        border: 1px solid var(--input);
+        cursor: pointer;
+      }
+
+      .output-box {
+        padding: 25px;
+        background: var(--input);
+        border-radius: 15px;
+        min-height: 80px;
+        font-size: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        border: 2px dashed var(--primary);
+        align-items: center;
+      }
+      .word-bubble {
+        cursor: pointer;
+        padding: 5px 12px;
+        border-radius: 8px;
+        background: rgba(233, 69, 96, 0.1);
+        border: 1px solid rgba(233, 69, 96, 0.3);
+        transition: 0.2s;
+      }
+      .word-bubble:hover {
+        background: var(--primary);
+        transform: translateY(-3px);
+      }
+
+      .highlight {
+        background: var(--primary) !important;
+        color: white !important;
+        box-shadow: 0 0 15px var(--primary);
+        transform: scale(1.1);
+      }
+
+      .btn-main {
+        width: 100%;
+        padding: 18px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: 15px;
+      }
+      .btn-main:hover {
+        background: #ff4d6d;
+        letter-spacing: 1px;
+      }
+
+      /* Dictionary Section */
+      .dict-section {
+        width: 95%;
+        max-width: 900px;
+        background: var(--card);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid var(--input);
+        box-sizing: border-box;
+      }
+      .search-container {
+        position: sticky;
+        top: 0;
+        background: var(--card);
+        padding-bottom: 20px;
+        z-index: 10;
+      }
+      .search-bar {
+        width: 100%;
+        padding: 15px;
+        border-radius: 12px;
+        border: 2px solid var(--input);
+        background: var(--input);
+        color: white;
+        font-size: 18px;
+        outline: none;
+        box-sizing: border-box;
+      }
+      .search-bar:focus {
+        border-color: var(--primary);
+      }
+
+      .dict-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+        max-height: 600px;
+        overflow-y: auto;
+        padding-right: 10px;
+      }
+      .dict-card {
+        background: var(--input);
+        padding: 12px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid transparent;
+      }
+      .dict-card:hover {
+        border-color: var(--primary);
+        background: #1c2b4a;
+      }
+      .eng-word {
+        font-size: 13px;
+        color: #aaa;
+        text-transform: lowercase;
+        margin-bottom: 4px;
+      }
+      .custom-word {
+        font-size: 18px;
+        color: var(--primary);
+        font-weight: bold;
+        text-transform: lowercase;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ducklien Aditi's Disctionary 🦆</h1>
+      <textarea
+        id="input"
+        placeholder="typeness here to translate... (e.g. what, what's, sleeping, begula)"
+      ></textarea>
+
+      <div class="controls">
+        <div class="control-group">
+          <label>VOICE</label>
+          <select id="voiceSelect"></select>
+        </div>
+        <div class="control-group">
+          <label>SPEED: <span id="speedVal">1.0x</span></label>
+          <input
+            type="range"
+            id="speed"
+            min="0.1"
+            max="2.0"
+            step="0.1"
+            value="1.0"
+          />
+        </div>
+      </div>
+
+      <div id="output" class="output-box"></div>
+      <button class="btn-main" onclick="speakAll()">SPEAK ALL</button>
+    </div>
+
+    <div class="dict-section">
+      <h2>🦆 Disctionary</h2>
+      <div class="search-container">
+        <input
+          type="text"
+          id="dictSearch"
+          class="search-bar"
+          placeholder="search english or Aditi's language words..."
+        />
+      </div>
+      <div id="dictionary" class="dict-grid"></div>
+    </div>
+
+    <script>
+
+      // ALL CUSTOM WORDS CONVERTED TO LOWERCASE
+      const customDictionary = [
+    
+      { custom: "forgor", english: "forgot" },
+        { custom: "cuz", english: "because" },
+        { custom: "wat", english: "what" },
+        { custom: "wat ya doin", english: "wyd" },
+        { custom: "congarusations", english: "congrats" },
+        { custom: "congarusations", english: "congratulate" },
+        { custom: "how r u", english: "hru" },
+        { custom: "u", english: "u" },
+        { custom: "yoii", english: "yo" },
+        { custom: "bro", english: "brother" },
+        { custom: "lil", english: "little" },
+        { custom: "haii", english: "hi" },
+        { custom: "baii", english: "bye" },
+        { custom: "tank u", english: "ty" },
+        { custom: "tank u soo mach", english: "tysm" },
+        { custom: "mach", english: "much" },
+        { custom: "watz", english: "whats" },
+        { custom: "wats", english: "what's" },
+        { custom: "goodmornight", english: "good morning" },
+        { custom: "goodmornight", english: "good night" },
+        { custom: "congarusations", english: "congratulations" },
+        { custom: "disctionary", english: "dictionary" },
+        { custom: "yesnt", english: "yes" },
+        { custom: "yesnt", english: "no" },
+        { custom: "yola", english: "hello" },
+        { custom: "swwy", english: "sorry" },
+        { custom: "swwry", english: "sorry" },
+        { custom: "itz", english: "it's" },
+        { custom: "itz", english: "its" },
+        { custom: "yazz", english: "yes" },
+        { custom: "yass", english: "yes" },
+        { custom: "yoss", english: "yes" },
+        { custom: "daym", english: "damn" },
+        { custom: "dam", english: "damn" },
+        { custom: "jus", english: "just" },
+        { custom: "jast", english: "just" },
+        { custom: "yapness", english: "yapp" },
+        { custom: "quack", english: "yap" },
+        { custom: "yapness", english: "yaping" },
+        { custom: "quacking", english: "yapping" },
+        { custom: "dat", english: "that" },
+        { custom: "dint", english: "didn't" },
+        { custom: "da", english: "the" },
+        { custom: "dis", english: "this" },
+        { custom: "dese", english: "these" },
+        { custom: "dey", english: "they" },
+        { custom: "dere", english: "there" },
+        { custom: "dere", english: "their" },
+        { custom: "tank", english: "thank" },
+        { custom: "tankingness", english: "thanking" },
+        { custom: "tankz", english: "thanks" },
+        { custom: "iz", english: "is" },
+        { custom: "it", english: "it" },
+        { custom: "stupido", english: "stupid" },
+        { custom: "pisostu", english: "stupido" },
+        { custom: "nah", english: "no" },
+        { custom: "gwi-hung", english: "hungry" },
+        { custom: "lawl", english: "lol" },
+        { custom: "shleep", english: "sleep" },
+        { custom: "shleeped", english: "sleptt" },
+        { custom: "sleeped", english: "slept" },
+        { custom: "shleeping", english: "sleepingg" },
+        { custom: "shleepingness", english: "sleeping" },
+        { custom: "eated", english: "ate" },
+        { custom: "ated", english: "atee" },
+        { custom: "eatness", english: "eating" },
+        { custom: "shule", english: "school" },
+        { custom: "yammy", english: "yummy" },
+        { custom: "timez", english: "times" },
+        { custom: "addness", english: "add" },
+        { custom: "typeness", english: "typing" },
+        { custom: "typeness", english: "typed" },
+        { custom: "thinkness", english: "thinking" },
+        { custom: "thinked", english: "thought" },
+        { custom: "taught", english: "thoughtt" },
+        { custom: "teached", english: "taught" },
+        { custom: "tryness", english: "try" },
+        { custom: "tryness", english: "tried" },
+        { custom: "sayness", english: "saying" },
+        { custom: "sayness", english: "say" },
+        { custom: "sayness", english: "said" },
+        { custom: "sed", english: "sad" },
+        { custom: "beluga-minded", english: "weird" },
+        { custom: "beluga-minded", english: "funny" },
+        { custom: "probaby", english: "probably" },
+        { custom: "breh", english: "bruh" },
+        { custom: "yall", english: "y'all" },
+        { custom: "yall", english: "you all" },
+        { custom: "luv", english: "love" },
+        { custom: "monkee", english: "monkey" },
+        { custom: "monee", english: "money" },
+        { custom: "faque", english: "fuck" },
+        { custom: "ooemmgee", english: "omg" },
+        { custom: "inglis", english: "english" },
+        { custom: "migrated", english: "traveled" },
+        { custom: "carnivorous", english: "non vegetarian" },
+        { custom: "carnivorous", english: "non veg" },
+        { custom: "drinked", english: "drank" },
+        { custom: "drunk", english: "sleepy" },
+        { custom: "gemmie", english: "gemini" },
+        { custom: "gippy", english: "chatgpt" },
+        { custom: "peepol", english: "people" },
+        { custom: "peeza", english: "pizza" },
+        { custom: "watar", english: "water" },
+        // people
+        { custom: "Adeetee", english: "Aditi" },
+        { custom: "Veeruu", english: "Veer" },
+        // peepol
+        { custom: "Da Great Beluga Lord", english: "Beluga" },
+        { custom: "Dagmagdola Dagmagdola Bambarbola Bambarbola", english: "begula" },
+        { custom: "The great kim jong un", english: "kim jong un" },
+        // people
+        { custom: "Spooderman", english: "Spidy" },
+        { custom: "DEV THE PRO", english: "dev" },
+        { custom: "Zonalisa", english: "zona" },
+        { custom: "Jaypee da cool monkee", english: "jaypee the bro" },
+        { custom: "Himaliya", english: "Himawali" },
+        { custom: "Aadi Bestie", english: "Aadi" },
+        { custom: "understandingness", english: "understanding" },
+        { custom: "understandness", english: "understand" },
+        // people
+        { custom: "gippy", english: "chatgpt" },
+        // { custom: "guppy", english: "chatgpt" }
+      ];
+
+      const input = document.getElementById("input");
+      const output = document.getElementById("output");
+      const voiceSelect = document.getElementById("voiceSelect");
+      const speed = document.getElementById("speed");
+      const dictDisplay = document.getElementById("dictionary");
+      const dictSearch = document.getElementById("dictSearch");
+
+      let voices = [];
+
+      function loadVoices() {
+        voices = window.speechSynthesis.getVoices();
+        voiceSelect.innerHTML = voices
+          .map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`)
+          .join("");
+      }
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices();
+
+      function renderDict(data) {
+        const html = data
+          .map(
+            (entry) => `
+            <div class="dict-card" onclick="speak('${entry.custom.replace(/'/g, "\\'")}')">
+                <span class="eng-word">meaning: ${entry.english}</span>
+                <span class="custom-word">${entry.custom}</span>
+            </div>
+        `
+          )
+          .join("");
+        dictDisplay.innerHTML = html;
+      }
+
+      dictSearch.addEventListener("input", (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = customDictionary.filter(
+          (entry) =>
+            entry.english.toLowerCase().includes(term) ||
+            entry.custom.toLowerCase().includes(term)
+        );
+        renderDict(filtered);
+      });
+
+      input.addEventListener("input", () => {
+        const text = input.value.trim();
+        if (!text) {
+          output.innerHTML = "";
+          return;
+        }
+
+        const words = text.split(/\s+/);
+        output.innerHTML = words
+          .map((w) => {
+            const cleanWord = w.toLowerCase().replace(/[^a-z']/g, "");
+            
+            const match = customDictionary.find(
+              (entry) => entry.english.toLowerCase() === cleanWord
+            );
+
+            const displayWord = match ? match.custom.toLowerCase() : w.toLowerCase();
+            return `<span class="word-bubble" onclick="speak('${displayWord.replace(/'/g, "\\'")}', this)">${displayWord}</span>`;
+          })
+          .join("");
+      });
+
+      function speak(text, el) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        if (voices[voiceSelect.value]) {
+          u.voice = voices[voiceSelect.value];
+        }
+        u.rate = parseFloat(speed.value);
+        if (el) {
+          u.onstart = () => el.classList.add("highlight");
+          u.onend = () => el.classList.remove("highlight");
+        }
+        window.speechSynthesis.speak(u);
+      }
+
+      function speakAll() {
+        const bubbles = Array.from(output.children);
+        let i = 0;
+        function playNext() {
+          if (i >= bubbles.length) return;
+          const u = new SpeechSynthesisUtterance(bubbles[i].innerText);
+          if (voices[voiceSelect.value]) {
+            u.voice = voices[voiceSelect.value];
+          }
+          u.rate = parseFloat(speed.value);
+          u.onstart = () => bubbles[i].classList.add("highlight");
+          u.onend = () => {
+            bubbles[i].classList.remove("highlight");
+            i++;
+            playNext();
+          };
+          window.speechSynthesis.speak(u);
+        }
+        playNext();
+      }
+
+      speed.oninput = () =>
+        (document.getElementById("speedVal").innerText = speed.value + "x");
+
+      renderDict(customDictionary);
+    </script>
+  </body>
+</html>
