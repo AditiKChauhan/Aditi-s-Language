@@ -33,6 +33,24 @@
         border: 1px solid var(--input);
         margin-bottom: 30px;
       }
+
+      /* btn */
+.btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.btn-secondary {
+  background: #0f3460;
+  border: 1px solid var(--primary);
+}
+.btn-secondary:hover {
+  background: #16213e;
+}
+      /* btn */
+      
       h1, h2 {
         color: var(--primary);
         text-align: center;
@@ -131,7 +149,7 @@
         cursor: pointer;
         font-weight: bold;
         transition: 0.3s;
-        margin-top: 15px;
+
       }
       .btn-main:hover {
         background: #ff4d6d;
@@ -241,7 +259,10 @@
       </div>
 
       <div id="output" class="output-box"></div>
-      <button class="btn-main" onclick="speakAll()">SPEAK ALL</button>
+    <div class="btn-group">
+  <button class="btn-main" onclick="speakAll()">SPEAK ALL</button>
+  <button class="btn-main btn-secondary" id="copyBtn" onclick="copyTranslation()">COPY TRANSLATION 📋</button>
+</div>
     </div>
 
     <div class="dict-section">
@@ -858,6 +879,19 @@
       }
 
       function speakAll() {
+        function copyTranslation() {
+  const textToCopy = output.innerText.trim();
+  if (!textToCopy) return;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const btn = document.getElementById("copyBtn");
+    const originalText = btn.innerText;
+    btn.innerText = "COPIED! ✅";
+    setTimeout(() => {
+      btn.innerText = originalText;
+    }, 2000);
+  });
+}
         const bubbles = Array.from(output.children);
         let i = 0;
         function playNext() {
