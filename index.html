@@ -878,20 +878,21 @@
         window.speechSynthesis.speak(u);
       }
 
-      function speakAll() {
-        function copyTranslation() {
-  const textToCopy = output.innerText.trim();
-  if (!textToCopy) return;
+   function copyTranslation() {
+        const textToCopy = output.innerText.trim();
+        if (!textToCopy) return;
 
-  navigator.clipboard.writeText(textToCopy).then(() => {
-    const btn = document.getElementById("copyBtn");
-    const originalText = btn.innerText;
-    btn.innerText = "COPIED! ✅";
-    setTimeout(() => {
-      btn.innerText = originalText;
-    }, 2000);
-  });
-}
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const btn = document.getElementById("copyBtn");
+          const originalText = btn.innerText;
+          btn.innerText = "COPIED! ✅";
+          setTimeout(() => {
+            btn.innerText = originalText;
+          }, 2000);
+        });
+      }
+
+      function speakAll() {
         const bubbles = Array.from(output.children);
         let i = 0;
         function playNext() {
