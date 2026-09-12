@@ -34,22 +34,20 @@
         margin-bottom: 30px;
       }
 
-      /* btn */
-.btn-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 15px;
-}
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+      }
 
-.btn-secondary {
-  background: #0f3460;
-  border: 1px solid var(--primary);
-}
-.btn-secondary:hover {
-  background: #16213e;
-}
-      /* btn */
+      .btn-secondary {
+        background: #0f3460;
+        border: 1px solid var(--primary);
+      }
+      .btn-secondary:hover {
+        background: #16213e;
+      }
       
       h1, h2 {
         color: var(--primary);
@@ -149,7 +147,6 @@
         cursor: pointer;
         font-weight: bold;
         transition: 0.3s;
-
       }
       .btn-main:hover {
         background: #ff4d6d;
@@ -259,10 +256,10 @@
       </div>
 
       <div id="output" class="output-box"></div>
-    <div class="btn-group">
-  <button class="btn-main" onclick="speakAll()">SPEAK ALL</button>
-  <button class="btn-main btn-secondary" id="copyBtn" onclick="copyTranslation()">COPY TRANSLATION 📋</button>
-</div>
+      <div class="btn-group">
+        <button class="btn-main" onclick="speakAll()">SPEAK ALL</button>
+        <button class="btn-main btn-secondary" id="copyBtn" onclick="copyTranslation()">COPY</button>
+      </div>
     </div>
 
     <div class="dict-section">
@@ -280,8 +277,8 @@
 
     <script>
       const customDictionary = [
-          { custom: "me", english: "i" },
-          { custom: "doin", english: "doing" },
+        { custom: "me", english: "i" },
+        { custom: "doin", english: "doing" },
         { custom: "forgor", english: "forgot" },
         { custom: "cuz", english: "because" },
         { custom: "wat", english: "what" },
@@ -291,10 +288,10 @@
         { custom: "how r u", english: "hru" },
         { custom: "u", english: "you" },
         { custom: "yoii", english: "yo" },
-            { custom: "yall", english: "everyone" },
-          { custom: "sizter", english: "sister" },
-           { custom: "bro", english: "brother" },
-           { custom: "vro", english: "bro" },
+        { custom: "yall", english: "everyone" },
+        { custom: "sizter", english: "sister" },
+        { custom: "bro", english: "brother" },
+        { custom: "vro", english: "bro" },
         { custom: "lil", english: "little" },
         { custom: "haii", english: "hi" },
         { custom: "baii", english: "bye" },
@@ -878,14 +875,15 @@
         window.speechSynthesis.speak(u);
       }
 
-   function copyTranslation() {
-        const textToCopy = output.innerText.trim();
+      function copyTranslation() {
+        const bubbles = Array.from(output.children);
+        const textToCopy = bubbles.map(b => b.innerText.trim()).join(" ");
         if (!textToCopy) return;
 
         navigator.clipboard.writeText(textToCopy).then(() => {
           const btn = document.getElementById("copyBtn");
           const originalText = btn.innerText;
-          btn.innerText = "COPIED! ✅";
+          btn.innerText = "COPIED 🦆";
           setTimeout(() => {
             btn.innerText = originalText;
           }, 2000);
